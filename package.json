@@ -4,10 +4,10 @@
   "description": "RESTful API for the Build Week Project: Empathy Builder",
   "main": "index.js",
   "scripts": {
-		"test": "cross-env DB_ENV=testing jest --watch --verbose",
-		"server": "nodemon index.js",
-		"start": "node index.js"
-	},
+    "test": "cross-env DB_ENV=testing jest --watch --verbose",
+    "server": "nodemon index.js",
+    "start": "node index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/empathy-builder/empathy_builder_be.git"
@@ -40,6 +40,7 @@
     "helmet": "^3.18.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.17.6",
+    "pg": "^7.11.0",
     "sqlite3": "^4.0.9",
     "time-stamp": "^2.2.0"
   }
