@@ -7,7 +7,6 @@ module.exports = function (req, res, next) {
                 ...req.body
             }
             req.validInput.password = bcrypt.hashSync(req.validInput.password, 10)
-            console.log("valid input", req.validInput)
             next()
         } else {
             res.status(422).json({

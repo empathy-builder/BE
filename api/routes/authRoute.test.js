@@ -1,7 +1,6 @@
-const supertest = require('supertest');
-const bcrypt = require('bcryptjs')
+const supertest = require('supertest')
 
-const server = require('../server.js');
+const server = require('../server.js')
 
 const db = require('../../data/config/dbConfig.js')
 
@@ -82,4 +81,79 @@ describe('server', () => {
             .expect(405)
         })
     })  
+
+    describe('POST /login', () => {
+
+        it('should return the correct response status of 500 with no req.body', async () => {
+            const newUser = { }
+
+            await supertest(server)
+            .post('/api/auth/login')
+            .send(newUser)
+            .set('Accept', 'application/json')
+            .expect(500)
+        })
+
+        it('should return the correct response status of 401 if not all required fields are submitted', async () => {
+            const newUser = {
+                email: 'testing@admin.com'
+            }
+
+            await supertest(server)
+            .post('/api/auth/login')
+            .send(newUser)
+            .set('Accept', 'application/json')
+            .expect(401)
+            })
+
+        it('should return the correct response status of 200', async () => {
+            const newUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+            await supertest(server)
+            .post('/api/auth/register')
+            .send(newUser)
+            .set('Accept', 'application/json')
+            .expect(201)
+
+            const regUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+            await supertest(server)
+            .post('/api/auth/login')
+            .send(regUser)
+            .set('Accept', 'application/json')
+            .expect(200)
+        })
+
+        it('should return the correct response containing the token', async () => {
+            const newUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+            await supertest(server)
+            .post('/api/auth/register')
+            .send(newUser)
+            .set('Accept', 'application/json')
+            .expect(201)
+
+            const regUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+            await supertest(server)
+            .post('/api/auth/login')
+            .send(regUser)
+            .set('Accept', 'application/json')
+            .then( res => {
+                expect(res.body).toEqual({
+                    message: "Welcome testing@admin.com",
+                       user: {
+                         email: "testing@admin.com",
+                         id: 1,
+                         token: res.body.user.token
+                        }
+                })
+            })
+        })
+    })  
 })
+
