@@ -8,14 +8,15 @@ exports.up = function(knex, Promise) {
                 .string('email', 128)
                 .notNullable()
                 .unique()
+                
             table
                 .string('password', 128)
                 .notNullable()
         })
-  };
+  }
   
   exports.down = function(knex, Promise) {
     return knex.schema
         .dropTableIfExists('users')
-  };
+  }
   
