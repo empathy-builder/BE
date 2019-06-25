@@ -13,6 +13,7 @@ function insert(user) {
   return db('users')
     .insert(user, 'id')
     .then(ids => {
+      console.log(ids)
       return db('users')
         .where({ id: ids[0] })
         .first()

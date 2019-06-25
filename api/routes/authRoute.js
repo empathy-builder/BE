@@ -3,6 +3,8 @@ const Users = require('../models/usersModel.js')
 
 const validateUserData = require('../functions/validateUserData.js')
 const validateUser = require('../functions/validateUser.js')
+const validateUserId = require('../functions/validateUserId.js')
+
 
 const router = express.Router()
 
@@ -37,6 +39,27 @@ router.post('/login', validateUser, async (req, res) => {
         res.status(500).json({
             message: "Error"
         })
+    }
+})
+
+router.put('/:id', validateUserId, validateUserData, async (req, res) => {
+    try {
+        console.log('check', req.validUser.id, req.validUserData)
+        const updatedUser = await Users.update(req.validUser.id, req.validInput)
+        res.status(201).json(updatedUser)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error)
+    }
+})
+
+router.delete('/:id', validateUserId, async (req, res) => {
+    try {
+        const deletedUser = await Users.remove(req.validUser.id)
+        res.status(200).json(deletedUser)
+    } catch (error) {
+        console.log(error)
+        res.status(500).json(error)
     }
 })
 

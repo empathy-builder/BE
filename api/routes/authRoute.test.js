@@ -155,5 +155,87 @@ describe('server', () => {
             })
         })
     })  
+
+    describe('PUT /:id', () => {
+        it('should return the correct status', async () => {
+            const newUser = {
+                email: 'testin@admin.com', password: 'testin'
+            }
+            await supertest(server)
+            .post('/api/auth/register')
+            .send(newUser)
+            .set('Accept', 'application/json')
+            .expect(201)
+
+            const updatedUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+            await supertest(server)
+            .put('/api/auth/1')
+            .send(updatedUser)
+            .set('Accept', 'application/json')
+            .expect(201)
+        })
+
+        it('should update the game with the given id in the db through the endpoint', async () => {
+            const newUser = {
+                email: 'testin@admin.com', password: 'testin'
+            }
+            await supertest(server)
+            .post('/api/auth/register')
+            .send(newUser)
+            .set('Accept', 'application/json')
+            .expect(201)
+
+            const updatedUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+            await supertest(server)
+                .put('/api/auth/1')
+                .send(updatedUser)
+                .set('Accept', 'application/json')
+                .then(res =>  {
+                    console.log(res.body)
+                    expect(res.body).toEqual({
+                        id: 1, email: 'testing@admin.com', password: res.body.password
+                    })
+                })
+        })
+    })
+
+    describe('DELETE /:id', () => {
+        it('should return the correct status', async () => {
+            const newUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+            await supertest(server)
+            .post('/api/auth/register')
+            .send(newUser)
+            .set('Accept', 'application/json')
+            .expect(201)
+
+            await supertest(server)
+            .delete('/api/auth/1')
+            .expect(200)
+        })
+
+        it('should return 1 if deleted', async () => {
+            const newUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+            await supertest(server)
+            .post('/api/auth/register')
+            .send(newUser)
+            .set('Accept', 'application/json')
+            .expect(201)
+
+            await supertest(server)
+            .delete('/api/auth/1')
+            .then(res =>  {
+                expect(res.body).toBe(1)
+            })
+        })
+    })
+
 })
 
