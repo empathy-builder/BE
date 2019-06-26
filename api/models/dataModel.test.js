@@ -44,8 +44,7 @@ describe('data model', () => {
       insert(sampleData)
       insert(sampleData)
       insert(sampleData2)
-      const relationship_status = 'married'
-      const data = await findBy({ relationship_status })
+      const data = await findBy( "relationship_status", 'married' )
       expect(data).toHaveLength(1)
     })
   })

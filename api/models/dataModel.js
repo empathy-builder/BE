@@ -20,7 +20,7 @@ function getAll() {
   return db('data')
 }
 
-function findBy(filter) {
+function findBy(column, filter) {
   return db('data')
-      .where(filter)
+      .where({ [column]: filter})
 }
