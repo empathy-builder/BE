@@ -6,6 +6,7 @@ exports.seed = function(knex, Promise) {
       // Inserts seed entries
       return knex('data').insert([
         {
+          //has vehicle in general?
           //general data
           current_location: 81401,
           timestamp: 20181026,
@@ -22,6 +23,7 @@ exports.seed = function(knex, Promise) {
           personal_savings: 1000,
           individual_income: 500,
 
+          //child care
           //personal budget
           transportation: 50,
           food: 200,

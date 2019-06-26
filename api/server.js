@@ -12,7 +12,7 @@ server.use(logger)
 server.use(express.json())
 
 server.use('/api/auth', authRouter)
-server.use('/api/', restrictedRouter)
+server.use('/api', restrictedRouter)
 
 server.get('/', (req, res) => {
     res.status(200).json({ message: `The server is on and waiting for requests...`})

@@ -9,9 +9,9 @@ beforeEach(async () => {
   })
 
 describe('server', () => {
-
+    
     describe('POST /register', () => {
-
+        
         it('should return the correct response status of 400 with no req.body', async () => {
             const newUser = { }
 

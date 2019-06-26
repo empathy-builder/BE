@@ -18,7 +18,7 @@ router.get('/data/search', restrictedMiddleware, async (req, res) => {
     const { column, filter } = req.body
     try {
         const data = await Data.findBy(column, filter)
-        res.status(200).json(data)
+        res.status(201).json(data)
     } catch (error) {
         console.log(error)
         res.status(500).json(error)
@@ -29,7 +29,7 @@ router.post('/insert', async (req, res) => {
     const newData = req.body
     try {
         await Data.insert(newData)
-        res.status(201).json({
+        res.status(200).json({
             message: 'data entered into DB'
         })
     } catch (error) {

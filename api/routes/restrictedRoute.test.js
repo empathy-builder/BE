@@ -4,12 +4,13 @@ const server = require('../server.js')
 
 const db = require('../../data/config/dbConfig.js')
 
-beforeEach(async () => {
-    await db('data').truncate()
-  })
+
 
 describe('server', () => {
-
+    beforeEach(async () => {
+        await db('data').truncate()
+        await db('users').truncate()
+      })
     describe('POST /insert', () => {
         
         it('should return the correct response status of 201', async () => {
@@ -22,7 +23,7 @@ describe('server', () => {
     })  
 
     describe('GET /data', () => {
-        
+        console.log("*******************")
         it('should return the correct response status of 200', async () => {
             const newUser = {
                 email: 'testing@admin.com', password: 'testing'
@@ -37,12 +38,16 @@ describe('server', () => {
                 email: 'testing@admin.com', password: 'testing'
             }
 
+            let token = ''
+
             await supertest(server)
             .post('/api/auth/login')
             .send(regUser)
             .set('Accept', 'application/json')
-            .then( res => {
+            .then(res => {
                 expect(200)
+                token = res.body.user.token
+                console.log("*******************", token)
             })
 
             await supertest(server)
@@ -56,6 +61,7 @@ describe('server', () => {
             .send(sampleData)
             .set('Accept', 'application/json')
             .expect(201)
+
             await supertest(server)
             .get('/api/data')
             .set('authorization', token)
@@ -73,6 +79,31 @@ describe('server', () => {
     describe('GET /data/:filter', () => {
         
         it('should return the correct response status of 200', async () => {
+            const newUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+            await supertest(server)
+            .post('/api/auth/register')
+            .send(newUser)
+            .set('Accept', 'application/json')
+            .expect(201)
+
+            const regUser = {
+                email: 'testing@admin.com', password: 'testing'
+            }
+
+            let token = ''
+
+            await supertest(server)
+            .post('/api/auth/login')
+            .send(regUser)
+            .set('Accept', 'application/json')
+            .then(res => {
+                expect(200)
+                token = res.body.user.token
+                console.log("*******************", token)
+            })
+
             await supertest(server)
             .post('/api/insert')
             .send(sampleData)
@@ -92,6 +123,7 @@ describe('server', () => {
                 filter: "married"
             })
             .set('Accept', 'application/json')
+            .set('authorization', token)
             .expect(200)
 
             await supertest(server)
@@ -101,6 +133,7 @@ describe('server', () => {
                 filter: "married"
             })
             .set('Accept', 'application/json')
+            .set('authorization', token)
             .then(res => {
                 expect(res.body).toHaveLength(1)
             })
